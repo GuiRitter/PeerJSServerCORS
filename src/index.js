@@ -11,6 +11,8 @@ const peerServer = ExpressPeerServer(server, {
 	path: '/api'
 });
 
+app.options('*', cors()); // include before other routes
+
 // Add middleware for parsing URL encoded bodies (which are usually sent by browser)
 app.use(cors());
 // Add middleware for parsing JSON and urlencoded data and populating `req.body`
