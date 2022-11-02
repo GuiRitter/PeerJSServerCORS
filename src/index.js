@@ -7,10 +7,6 @@ const { ExpressPeerServer } = require('peer');
 
 const app = express();
 
-const peerServer = ExpressPeerServer(server, {
-	path: '/api'
-});
-
 app.options('*', cors()); // include before other routes
 
 // Add middleware for parsing URL encoded bodies (which are usually sent by browser)
@@ -19,10 +15,14 @@ app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-app.use('/peerjs-server', peerServer);
-
-app.listen(process.env.PORT, '127.0.0.1').on('listening', () => {
+const server = app.listen(process.env.PORT, '127.0.0.1').on('listening', () => {
 	console.log(`${(new Date()).toISOString()} are live on ${process.env.PORT}`);
 });
+
+const peerServer = ExpressPeerServer(server, {
+	path: '/api'
+});
+
+app.use('/peerjs-server', peerServer);
 
 export default app;
